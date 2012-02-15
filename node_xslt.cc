@@ -8,6 +8,7 @@
 #include <string.h>
 #include "macros.h"
 #include "scopeguard.h"
+#include <libexslt/exslt.h>
 
 #define OBJ_DESTRUCTOR(d) Persistent<Object> _weak_handle = Persistent<Object>::New(self); \
                           _weak_handle.MakeWeak(NULL, d);
@@ -141,7 +142,8 @@ END
 extern "C" void init(Handle<Object> target)
 {
     HandleScope scope;
-
+	
+    exsltRegisterAll();
     Handle<Object> self = target;
     BIND("readXmlString", readXmlString);
     BIND("readHtmlString", readHtmlString);
