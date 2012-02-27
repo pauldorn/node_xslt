@@ -17,7 +17,7 @@ def build(bld):
     obj.target = 'node_xslt'
     obj.source = 'node_xslt.cc'
     obj.cxxflags = subprocess.Popen(["xml2-config", "--cflags"], stdout=subprocess.PIPE).communicate()[0].strip()
-    obj.lib = ['xml2', 'xslt']
+    obj.lib = ['xml2', 'xslt','exslt']
     obj.libpath = ['/usr/lib']
 
 def clean(ctx):
