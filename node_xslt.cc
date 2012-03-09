@@ -130,13 +130,19 @@ FUNCTION(xpathEval)
             return JS_ERROR("Failed to register config namespace");
         }
     }
-    xmlXPathObjectPtr ret = xmlXPathEvalExpression((xmlChar *)*xpathExpr, xpathCtxt);
-    if (!ret) {
-        return JS_ERROR("Bad xpath");
-    }
+    xmlXPathObjectPtr xpathObj = xmlXPathEvalExpression((xmlChar *)*xpathExpr, xpathCtxt);
     xmlXPathFreeContext(xpathCtxt);
+    if (xpathObj == NULL) {
+        return JS_ERROR("Bad xpath");
+    } else {
+        int empty = xmlXPathNodeSetIsEmpty(xpathObj->nodesetval);
+        xmlXPathFreeObject(xpathObj);
+        // Non-NULL. But, is it really ok?
+        if (empty) {
+            return JS_ERROR("Empty node set");
+        }
+    }
 
-    //FIXME: Do we really have to return something??? What makes sense?
     RETURN_SCOPED(JS_str2("true",strlen("true")));
 END
 
